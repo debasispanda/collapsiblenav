@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Collapsible Navigation : Bootstrap</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/collapsible-nav.css">
+</head>
+<body>
+	<div class="col-xs-10 navigation-container">
+		<ul class="collapsible-nav nav">
+			<li class="nav-item"><a href="#">Action</a></li>
+			<li class="nav-item"><a href="#">Another action</a></li>
+			<li class="nav-item"><a href="#">Something else</a></li>
+			<li class="nav-item"><a href="#">Separated link</a></li>
+			<li class="nav-item"><a href="#">One more</a></li>
+		</ul>
+	</div>
+	<div class="col-xs-2">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="btn-group">
+					<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu" id="collapsed-dropdown">
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Script Files -->
+	<script src="js/jquery-1.10.2.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<script src="js/collapsible-nav.js"></script>
+	<script type="text/javascript">	
+		$(function () {
+			$('.collapsible-nav').collapsemenu();
+		});
+	</script>
+</body>
+</html>
