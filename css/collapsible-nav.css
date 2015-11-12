@@ -1,8 +1,25 @@
 /* 
 	Author: Debasis Panda
 */
-
-ul li{
-	float: left;
+.collapsible-nav{
+	overflow: hidden;
+	white-space: nowrap;
+	/*display: table;*/
+}
+.collapsible-nav .nav-item{
 	padding: 10px;
+	/*display: table-cell;*/
+	display: inline-block;
+}
+.collapsible-nav .nav-item > a{
+	 border: 1px solid #ddd;
+}
+.btn-collpased-menu{
+	margin-top: 10px;
+	border-radius: 0;
+}
+.btn-collpased-menu .btn{
+	font-size: 20px;
+    padding: 5px 10px;
+    border-radius: 0;
 }

@@ -1,9 +1,11 @@
 // Author: Debasis Panda
+// Twitter: @imdebasispanda
+// Facebook: /imdebasispanda
+// Github: /debasispanda
+// Blog: imdebasispanda.blogspot.com
 
 /*!
- * jQuery lightweight plugin boilerplate
- * Original author: @ajpiano
- * Further changes, comments: @addyosmani
+ * jQuery Auto Collapsible Menu plugin
  * Licensed under the MIT license
  */
 
@@ -28,6 +30,7 @@
 
     // Create the defaults once
     var pluginName = 'collapsemenu',
+    pluginVersion = '1.0.0'
     defaults = {
     	propertyName: "value"
     };
@@ -35,7 +38,7 @@
     // The actual plugin constructor
     function Plugin(element, options) {
     	this.element = element;
-
+        this.version = pluginVersion;
         // jQuery has an extend method that merges the 
         // contents of two or more objects, storing the 
         // result in the first object. The first object 
@@ -50,53 +53,87 @@
     }
 
     Plugin.prototype.init = function () {
-    	var self= this;
+    	var $this = this;
     	console.log('collapsemenu initiated');
-    	console.log(this);
         // Place initialization logic here
         // You already have access to the DOM element and
         // the options via the instance, e.g. this.element 
         // and this.options
+        
+        var MenuWidth = {
+            visibleMenuWidth : 0,
+            totalMenuWidth : 0,
+            addibleItemWidth: 0,
+        };
 
+        $($this.element).find('.nav-item').each(function(){
+            $(this).attr('data-width', $(this).outerWidth());
+            MenuWidth.visibleMenuWidth += $(this).data('width');
+            if($('#collapsed-dropdown li:first-child').length){
+                MenuWidth.addibleItemWidth = $('#collapsed-dropdown li:first-child').data('width');
+            }
+            else{
+                MenuWidth.addibleItemWidth = 0;
+            }
+        });
         this.methods = {
         	calcMenu: function(){
-        		var MenuWidth = {
-        			visibleMenuWidth : 0,
-        			totalMenuWidth : 0,
-        			addibleItemWidth: 0,
-        		};
+                MenuWidth.visibleMenuWidth = 0;
+        		MenuWidth.addibleItemWidth = 0;
         		MenuWidth.totalMenuWidth = $('.navigation-container').width();
-        		$(self.element).find('.nav-item').each(function(){
-        			MenuWidth.visibleMenuWidth = MenuWidth.visibleMenuWidth + $(this).outerWidth();
-        			// if(MenuWidth.visibleMenuWidth >= MenuWidth.totalMenuWidth){
-        			// 	console.log('collapsed');
-        			// 	$(this).remove();
-        			// 	// $(self.element).find('.nav-item:last-child').prependTo('#collapsed-dropdown');
-        			// }
-
+        		$($this.element).find('.nav-item').each(function(){
+        			MenuWidth.visibleMenuWidth += $(this).data('width');
+                    if($('#collapsed-dropdown li:first-child').length){
+                        MenuWidth.addibleItemWidth = $('#collapsed-dropdown li:first-child').data('width');
+                    }
+                    else{
+                        MenuWidth.addibleItemWidth = 0;
+                    }
         		});
-        		MenuWidth.addibleItemWidth = $('#collapsed-dropdown li:first-child').outerWidth();
+        		console.log('calcMenu');
+                MenuWidth.visibleMenuWidth += 20;
         		return MenuWidth;
         	},
         	collapse: function(){
-        		var MenuWidth = this.calcMenu();
-        		if(MenuWidth.visibleMenuWidth >= MenuWidth.totalMenuWidth){
-        			console.log('collapsed');
-        			$(self.element).find('.nav-item:last-child').prependTo('#collapsed-dropdown');
-        		}
-        		else if(MenuWidth.totalMenuWidth > (parseInt(MenuWidth.visibleMenuWidth) + parseInt(MenuWidth.addibleItemWidth))){
-        			$('#collapsed-dropdown li:first-child').appendTo(self.element);
-        		}
+        		
+                var interval = setInterval(function(){
+                    $this.methods.calcMenu();
+
+                    if(MenuWidth.visibleMenuWidth >= MenuWidth.totalMenuWidth){
+                        $($this.element).find('.nav-item:last-child').prependTo('#collapsed-dropdown');                        
+                    }
+                    else if(MenuWidth.totalMenuWidth > (parseInt(MenuWidth.visibleMenuWidth) + parseInt(MenuWidth.addibleItemWidth))){
+                        if($('#collapsed-dropdown li:first-child').length){
+                            $('#collapsed-dropdown li:first-child').appendTo($this.element);
+                        }
+                        else{
+                            clearInterval(interval);
+                        }                        
+                    }
+                    else{
+                        clearInterval(interval);
+                    }
+                    if($('#collapsed-dropdown li').length){
+                        $('.btn-collpased-menu').show();
+                    }
+                    else{
+                        $('.btn-collpased-menu').hide();
+                    }
+
+                },50);
+                
         		console.log(MenuWidth.visibleMenuWidth , MenuWidth.totalMenuWidth);
 
         	},
 
         }
-
-        this.methods.collapse();
-        $(window).on('resize',function(){
-        	self.methods.collapse();
+        $(window).resize(function () {
+            clearTimeout($.data(this, 'resizeTimer'));
+            $.data(this, 'resizeTimer', setTimeout(function () {
+                $this.methods.collapse();
+            }, 400));
         });
+        $this.methods.collapse();
     };
 
     // A really lightweight plugin wrapper around the constructor, 
