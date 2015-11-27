@@ -4,11 +4,9 @@
 .collapsible-nav{
 	overflow: hidden;
 	white-space: nowrap;
-	/*display: table;*/
 }
 .collapsible-nav .nav-item{
 	padding: 10px;
-	/*display: table-cell;*/
 	display: inline-block;
 }
 .collapsible-nav .nav-item > a{
